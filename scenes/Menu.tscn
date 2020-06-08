@@ -1,0 +1,67 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://scripts/Menu.gd" type="Script" id=1]
+
+[node name="Control" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="BJoin" type="Button" parent="."]
+margin_left = 441.208
+margin_top = 205.335
+margin_right = 507.208
+margin_bottom = 225.335
+text = "Join server"
+
+[node name="BCreate" type="Button" parent="."]
+margin_left = 433.565
+margin_top = 253.108
+margin_right = 530.565
+margin_bottom = 273.108
+text = "Create server"
+
+[node name="NameEdit" type="LineEdit" parent="."]
+margin_left = 430.0
+margin_top = 300.0
+margin_right = 540.0
+margin_bottom = 324.0
+max_length = 7
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="NameLabel" type="Label" parent="."]
+margin_left = 460.709
+margin_top = 327.745
+margin_right = 500.709
+margin_bottom = 341.745
+text = "Name"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="IPEdit" type="LineEdit" parent="."]
+margin_left = 430.0
+margin_top = 354.485
+margin_right = 540.0
+margin_bottom = 378.485
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="IPLabel" type="Label" parent="."]
+margin_left = 460.709
+margin_top = 382.23
+margin_right = 500.709
+margin_bottom = 396.23
+text = "IP"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+[connection signal="button_down" from="BJoin" to="." method="join"]
+[connection signal="button_down" from="BCreate" to="." method="create"]

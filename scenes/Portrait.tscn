@@ -1,0 +1,65 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://Assets/Players.png" type="Texture" id=1]
+[ext_resource path="res://Assets/Player/HealthUnder.png" type="Texture" id=2]
+[ext_resource path="res://Assets/Player/Health.png" type="Texture" id=3]
+
+[node name="Portrait" type="Control"]
+margin_right = 60.0
+margin_bottom = 70.0
+mouse_filter = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Character" type="TextureRect" parent="."]
+margin_left = 30.0
+margin_right = 42.0
+margin_bottom = 24.0
+rect_scale = Vector2( 2, 2 )
+mouse_filter = 2
+texture = ExtResource( 1 )
+expand = true
+stretch_mode = 2
+
+[node name="Bar" type="ColorRect" parent="."]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = -30.0
+margin_right = 3.8147e-06
+mouse_filter = 2
+color = Color( 0.180392, 0.184314, 0.223529, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Name" type="Label" parent="Bar"]
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -30.0
+margin_top = 3.0
+margin_right = 50.0
+margin_bottom = 17.0
+rect_scale = Vector2( 0.75, 0.75 )
+text = "test"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Health" type="TextureProgress" parent="Bar"]
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_left = 6.0
+margin_top = -17.0
+margin_right = 30.0
+margin_bottom = -10.0
+rect_scale = Vector2( 2, 2 )
+mouse_filter = 2
+value = 100.0
+texture_under = ExtResource( 2 )
+texture_progress = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}

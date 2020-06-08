@@ -1,0 +1,31 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://scripts/Potraits.gd" type="Script" id=1]
+[ext_resource path="res://scenes/Levels/LevelTemp.tscn" type="PackedScene" id=2]
+[ext_resource path="res://scripts/Game.gd" type="Script" id=3]
+[ext_resource path="res://scripts/Level.gd" type="Script" id=4]
+
+[node name="GM" type="Node2D"]
+script = ExtResource( 3 )
+
+[node name="Players" type="Node2D" parent="."]
+
+[node name="Level" type="Node2D" parent="."]
+script = ExtResource( 4 )
+
+[node name="Level" parent="Level" instance=ExtResource( 2 )]
+
+[node name="Bullets" type="Node2D" parent="."]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Potraits" type="Control" parent="CanvasLayer"]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = -80.0
+mouse_filter = 2
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}

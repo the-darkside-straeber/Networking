@@ -1,0 +1,35 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://scripts/Lobby.gd" type="Script" id=1]
+[ext_resource path="res://Assets/PlayButton.png" type="Texture" id=2]
+[ext_resource path="res://scripts/Button.gd" type="Script" id=3]
+
+[node name="Lobby" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Button" type="Node2D" parent="."]
+visible = false
+position = Vector2( 954.984, 521.024 )
+scale = Vector2( 2, 2 )
+script = ExtResource( 3 )
+
+[node name="Button" type="Button" parent="Button"]
+margin_right = 22.0
+margin_bottom = 22.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Sprite" type="Sprite" parent="Button"]
+position = Vector2( 11, 11 )
+texture = ExtResource( 2 )
+
+[node name="Frames" type="Control" parent="."]
+margin_right = 40.0
+margin_bottom = 40.0
+[connection signal="button_up" from="Button/Button" to="Button" method="Pressed"]
