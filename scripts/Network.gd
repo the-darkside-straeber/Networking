@@ -8,14 +8,22 @@ signal set_main_camera
 signal player_disconnected
 
 var players = {}
-var self_data= {pName = "", player = -1, score = 0, dead = false}
-var slots = 0
-var mode = 0
+var self_data= {pName = "", player = -1, score = 1, dead = false, character = 0, color = 0}
+var slots := 0
+var mode := 0
+var has_loaded := false
 
-
-func getNewPlayer():
+func getNewPlayer() -> Vector2:
 	slots += 1
-	return slots
+	for i in range(6):
+		var count = 0
+		for player in players:
+			count += 1
+			if players[player].character == 0 and i == players[player].color:
+				break
+			if count == players.size():
+				return Vector2(slots, i)
+	return Vector2(slots, 0)
 
 
 func _ready():
@@ -31,12 +39,12 @@ func on_server_disconnected() -> void:
 
 func on_network_peer_connected(id: int) -> void:
 	if get_tree().is_network_server():
-		var playerNum = getNewPlayer()
-		rpc_id(id, "getPlayerNum", playerNum)
+		rpc_id(id, "getPlayerNum", getNewPlayer())
 
-remote func getPlayerNum(n : int)-> void:
+remote func getPlayerNum(n : Vector2)-> void:
 	#get_tree().root.get_node("Lobby").player = n
-	self_data.player = n
+	self_data.player = n.x
+	self_data.color = n.y
 	rpc("SendPlayerData", get_tree().get_network_unique_id(), self_data)
 
 func on_network_peer_disconnected(id: int):
@@ -45,7 +53,6 @@ func on_network_peer_disconnected(id: int):
 	for player in players:
 		if players[player].player > players[id].player:
 			players[player].player -= 1
-			print(players[player].player)
 	players.erase(id)
 	emit_signal("player_disconnected")
 
@@ -65,7 +72,6 @@ func CreateServer() -> void:
 	var peer = NetworkedMultiplayerENet.new()
 	peer.create_server(SERVER_PORT, MAX_PLAYERS)
 	get_tree().set_network_peer(peer)
-	print(get_tree().is_network_server())
 	get_tree().change_scene("res://scenes/Lobby.tscn")
 
 remote func SendPlayerData(id: int, data: Dictionary) -> void:
@@ -75,7 +81,10 @@ remote func SendPlayerData(id: int, data: Dictionary) -> void:
 			rpc_id(id, "SendPlayerData", peerId, players[peerId])
 	get_tree().root.get_node("Lobby").placeFrame(data.player, id)
 
-remotesync func GameSetup():
+remotesync func GameSetup() -> void:
+	for player in players:
+		players[player].dead = false
+	has_loaded = true
 	Match.alive = players.size()
 	get_tree().change_scene("res://scenes/Game.tscn")
 
@@ -91,6 +100,7 @@ remotesync func Preconfigured() -> void:
 	
 	if playersDone.size() == players.size():
 		rpc("PostConfigureGame")
+
 
 remotesync func PostConfigureGame() -> void:
 	get_tree().set_pause(false)

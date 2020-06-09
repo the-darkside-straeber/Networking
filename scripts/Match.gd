@@ -1,7 +1,14 @@
 extends Node
 
+const CHARACTERS := ["Default"]
+
+
 var alive := 0 setget _set_alive
 var bullet_reasource := preload("res://scenes/Bullet.tscn")
+
+
+func get_sprite(character: int, color: int) -> Resource:
+	return load("res://Assets/Player/Sprites/"+CHARACTERS[character]+"/"+str(color+1)+".png")
 
 
 func _set_alive(val: int) -> void:

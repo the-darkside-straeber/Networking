@@ -1,6 +1,6 @@
 extends Control
 
-func setVisuals(pName : String, n : int, text: String) -> void:
+func setVisuals(pName : String, text: String, character: int, color: int) -> void:
 	$Label.text = pName
-	$Portrait.frame = n
+	$Potrait.texture = Match.get_sprite(character, color)
 	$Score.text = text

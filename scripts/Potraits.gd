@@ -10,6 +10,7 @@ func _ready() -> void:
 func update_portraits() -> void:
 	for child in get_children():
 		child.name += "o"
+		child.queue_free()
 	var pos := 0
 	for player in Network.players:
 		pos += 1
@@ -17,7 +18,10 @@ func update_portraits() -> void:
 		portrait.name = str(player)
 		portrait.get_node("Bar/Name").text = Network.players[player].pName
 		portrait.rect_position = Vector2(pos*rect_size.x/(Network.players.size()+1),5)
-		print(portrait.rect_position.x)
+		portrait.get_node("Character").texture = Match.get_sprite(
+			Network.players[player].character,
+			Network.players[player].color
+		)
 		add_child(portrait)
 
 

@@ -31,7 +31,7 @@ puppet var gun_rotation := 0.0
 func setup(id) -> void:
 	slavehealth = max_health
 	slavePosition = position
-	$Sprite.frame = Network.players[id].player
+	$Sprite.texture = Match.get_sprite(Network.players[id].character, Network.players[id].color)
 	if id == get_tree().get_network_unique_id():
 		$Camera2D.current = true
 
@@ -43,8 +43,9 @@ func _set_slavehealth(val: int):
 
 remotesync func die() -> void:
 	hide()
-	pause_mode = Node.PAUSE_MODE_STOP
+	set_physics_process(false)
 	Network.players[get_network_master()].score = Network.players.size() - Match.alive
+	Network.players[get_network_master()].dead = true
 	Match.alive -= 1
 	if is_network_master():
 		Network.emit_signal("set_main_camera")

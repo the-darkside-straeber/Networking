@@ -9,7 +9,6 @@ func _ready():
 	localPlayer.position = get_node("Level/Level/Spawnpoint/"+str(Network.self_data.player)).position
 	$Players.add_child(localPlayer)
 	localPlayer.setup(peerID)
-	print(Network.self_data.player)
 	for p in Network.players:
 		if p == peerID:
 			continue
