@@ -22,6 +22,10 @@ func _on_network_peer_disconnected(id: int) -> void:
 
 
 func update_frames():
+	$Character.rect_position = Vector2(
+		rect_size.x*(Network.players[get_tree().get_network_unique_id()].player+1)/(Network.players.size()+1) - $Character.rect_size.x/2,
+		350
+	)
 	for child in $Frames.get_children():
 		if not int(child.name) in Network.players:
 			continue
@@ -43,4 +47,37 @@ remote func placeFrame(n : int, id: int) -> void:
 	slot.name = str(id)
 	slot.setVisuals(Network.players[id].pName, "", Network.players[id].character, Network.players[id].color)
 	slot.rect_position = Vector2(-margin+(rect_size.x+2*margin)*(n+1)/(Network.players.size()+1), 180)
+	update_frames()
+
+
+func _on_ColorRight_pressed() -> void:
+	for i in range(1,7):
+		var count := 0
+		for player in Network.players:
+			count += 1
+			if(Network.players[player].character == Network.players[get_tree().get_network_unique_id()].character and
+				Network.players[player].color == int(Network.players[get_tree().get_network_unique_id()].color + i)%6 and
+				player != get_tree().get_network_unique_id()):
+					break
+			if count == Network.players.size():
+				rpc("set_color", get_tree().get_network_unique_id(), int(Network.players[get_tree().get_network_unique_id()].color + i)%6)
+				return
+
+
+func _on_ColorLeft_pressed() -> void:
+	for i in range(1,7):
+		var count := 0
+		for player in Network.players:
+			count += 1
+			if(Network.players[player].character == Network.players[get_tree().get_network_unique_id()].character and
+				Network.players[player].color == int(Network.players[get_tree().get_network_unique_id()].color - i+6)%6 and
+				player != get_tree().get_network_unique_id()):
+					break
+			if count == Network.players.size():
+				rpc("set_color", get_tree().get_network_unique_id(), int(Network.players[get_tree().get_network_unique_id()].color - i+6)%6)
+				return
+
+
+remotesync func set_color(id: int, color: int) -> void:
+	Network.players[id].color = color
 	update_frames()
