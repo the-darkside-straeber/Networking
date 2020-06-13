@@ -1,7 +1,7 @@
 extends Node
 
 const CHARACTERS := ["Default"]
-
+const GUNS := ["Shotgun", "Handgun"]
 
 var alive := 0 setget _set_alive
 var bullet_reasource := preload("res://scenes/Bullet.tscn")
@@ -13,8 +13,12 @@ func get_sprite(character: int, color: int) -> Resource:
 
 func _set_alive(val: int) -> void:
 	alive = val
-	if alive == 1 and get_tree().is_network_server():
-		rpc("to_result")
+	if alive == 1:
+		for player in Network.players:
+			if !Network.players[player].dead:
+				Network.players[player].score += Network.players.size()-1
+		if get_tree().is_network_server():
+			rpc("to_result")
 
 
 remotesync func to_result():
@@ -37,4 +41,5 @@ remotesync func make_bullet(
 	bullet.ignore= ignore
 	bullet.force = force
 	bullet.damage = damage
-	get_tree().root.get_node("GM/Bullets").add_child(bullet)
+	if get_tree().root.has_node("GM/Bullets"):
+		get_tree().root.get_node("GM/Bullets").add_child(bullet)

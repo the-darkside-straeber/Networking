@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Assets/Player/Sprites/Default/1.png" type="Texture" id=1]
 [ext_resource path="res://scripts/Player.gd" type="Script" id=2]
@@ -7,6 +7,9 @@
 [sub_resource type="CapsuleShape2D" id=1]
 radius = 4.75835
 height = 13.0937
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 9.38063, 12.1275 )
 
 [node name="Player" type="KinematicBody2D"]
 collision_layer = 2
@@ -23,3 +26,11 @@ zoom = Vector2( 0.5, 0.5 )
 
 [node name="Gun" parent="." instance=ExtResource( 3 )]
 position = Vector2( 0, 2.5 )
+
+[node name="ItemDetect" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 4
+
+[node name="Col" type="CollisionShape2D" parent="ItemDetect"]
+visible = false
+shape = SubResource( 2 )

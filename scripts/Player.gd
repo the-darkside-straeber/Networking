@@ -1,7 +1,7 @@
 extends KinematicBody2D
 
 export var damp := .5
-export var speed := 18000
+export var speed := 14000
 export var grav := 40000
 export var jumpGrav := 30000
 export var kyoteJump := .15
@@ -9,6 +9,7 @@ export var jumpTime := .32
 export var jumpStrength :=18000
 export var acceleration := 100000
 export var max_health := 100
+export var max_speed := 30000
 
 var groundTimer : float = 0
 var onGround : bool = false
@@ -42,9 +43,12 @@ func _set_slavehealth(val: int):
 
 
 remotesync func die() -> void:
+	if Network.players[get_network_master()].dead:
+		return
 	hide()
 	set_physics_process(false)
-	Network.players[get_network_master()].score = Network.players.size() - Match.alive
+	set_process_unhandled_input(false)
+	Network.players[get_network_master()].score += Network.players.size() - Match.alive
 	Network.players[get_network_master()].dead = true
 	Match.alive -= 1
 	if is_network_master():
@@ -66,14 +70,22 @@ func damage(damage: int, source_id: int) -> void:
 
 func knockback(rotation: float, force: int) -> void:
 	if force != 0:
-		vel.y = 0
-		vel += Vector2(cos(rotation),sin(rotation))*force
+		vel.y = min(vel.y, sin(rotation)*force)
+		vel.x += cos(rotation)*force
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if is_network_master() && event.is_action_pressed("Fire"):
-		var recoil_force: int = $Gun.shoot()
-		knockback($Gun.rotation, -recoil_force)
+	if is_network_master():
+		var recoil_force := -22
+		if event.is_action_pressed("Fire"):
+			recoil_force = $Gun.shoot()
+			knockback($Gun.rotation, -max(0,recoil_force))
+		if event.is_action_pressed("pickup_item") or recoil_force == -1:
+			for area in $ItemDetect.get_overlapping_areas():
+				if area.get_collision_layer_bit(2):
+					var item_holder = area.get_parent()
+					$Gun.mode = item_holder.gun
+					item_holder.rpc("set_gun", "")
 
 
 func _physics_process(delta: float)-> void:
@@ -84,6 +96,7 @@ func _physics_process(delta: float)-> void:
 			vel.y += jumpGrav*delta
 		else:
 			vel.y += grav*delta
+		vel.y = min(vel.y,max_speed)
 		moveX = 0
 		moveX = Input.get_action_strength("MoveRight")-Input.get_action_strength("MoveLeft")
 		CalJump(delta)

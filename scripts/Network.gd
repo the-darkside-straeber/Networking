@@ -8,7 +8,7 @@ signal set_main_camera
 signal player_disconnected
 
 var players = {}
-var self_data= {pName = "", player = -1, score = 1, dead = false, character = 0, color = 0}
+var self_data= {pName = "", player = -1, score = 0, dead = false, character = 0, color = 0}
 var slots := 0
 var mode := 0
 var has_loaded := false
@@ -34,6 +34,7 @@ func _ready():
 
 
 func on_server_disconnected() -> void:
+	players = {}
 	get_tree().change_scene("res://scenes/Menu.tscn")
 
 
@@ -79,7 +80,8 @@ remote func SendPlayerData(id: int, data: Dictionary) -> void:
 	if get_tree().get_network_unique_id() == 1:
 		for peerId in players:
 			rpc_id(id, "SendPlayerData", peerId, players[peerId])
-	get_tree().root.get_node("Lobby").placeFrame(data.player, id)
+	if get_tree().root.has_node("Lobby"):
+		get_tree().root.get_node("Lobby").placeFrame(data.player, id)
 
 remotesync func GameSetup() -> void:
 	for player in players:
@@ -99,6 +101,7 @@ remotesync func Preconfigured() -> void:
 	playersDone.append(id)
 	
 	if playersDone.size() == players.size():
+		playersDone = []
 		rpc("PostConfigureGame")
 
 
