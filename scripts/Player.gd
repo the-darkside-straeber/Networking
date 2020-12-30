@@ -69,9 +69,8 @@ func damage(damage: int, source_id: int) -> void:
 
 
 func knockback(rotation: float, force: int) -> void:
-	if force != 0:
-		vel.y = min(vel.y, sin(rotation)*force)
-		vel.x += cos(rotation)*force
+	vel.y += sin(rotation)*force
+	vel.x += cos(rotation)*force
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -79,6 +78,8 @@ func _unhandled_input(event: InputEvent) -> void:
 		var recoil_force := -22
 		if event.is_action_pressed("Fire"):
 			recoil_force = $Gun.shoot()
+			if sin($Gun.rotation) >= 0 and vel.y < 0:
+				vel.y = 0
 			knockback($Gun.rotation, -max(0,recoil_force))
 		if event.is_action_pressed("pickup_item") or recoil_force == -1:
 			for area in $ItemDetect.get_overlapping_areas():

@@ -134,7 +134,7 @@ position = Vector2( -344, 152 )
 rotation = 1.57079
 
 [node name="Spring17" parent="Gimmicks" instance=ExtResource( 7 )]
-position = Vector2( 1304, 24 )
+position = Vector2( 1304, -15 )
 
 [node name="Spring2" parent="Gimmicks" instance=ExtResource( 7 )]
 position = Vector2( -344, 224 )

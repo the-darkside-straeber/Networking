@@ -3,7 +3,8 @@ extends Area2D
 
 func jump_body(body: Node) -> void:
 	body.vel = -body.vel.reflect(transform.y)
-	if body.vel.length() < 600:
+	var length = body.vel.length()
+	if 0 < length and length < 600:
 		body.vel *= min(2, 600/body.vel.length())
 
 
