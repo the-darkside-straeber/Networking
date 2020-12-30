@@ -1,13 +1,13 @@
 extends KinematicBody2D
 
 export var damp := .5
-export var speed := 14000
-export var grav := 40000
-export var jumpGrav := 30000
+export var speed := 240
+export var grav := 800
+export var jumpGrav := 600
 export var kyoteJump := .15
 export var jumpTime := .32
-export var jumpStrength :=18000
-export var acceleration := 100000
+export var jumpStrength := 360
+export var acceleration := 1000
 export var max_health := 100
 export var max_speed := 30000
 
@@ -101,17 +101,17 @@ func _physics_process(delta: float)-> void:
 		moveX = Input.get_action_strength("MoveRight")-Input.get_action_strength("MoveLeft")
 		CalJump(delta)
 		vel.x = cal_x_velocity(vel.x, moveX*speed, acceleration, delta)
-		vel = move_and_slide(vel*delta, Vector2(0,-1))/delta
+		vel = move_and_slide(vel, Vector2(0,-1))
 		rset("slaveVel", vel)
 		rset_unreliable("slavePosition", position)
 		if has_gun:
-			var angle: float = $Gun.position.angle_to(get_local_mouse_position()) + PI/2
+			var angle: float = $Gun.position.angle_to(get_local_mouse_position()) - PI/2
 			$Gun.rotation = angle
-			$Gun/Rotation/Sprite.flip_v = angle > PI/2
+			$Gun/Rotation/Sprite.flip_v = angle < -PI/2
 			rset_unreliable("gun_rotation", $Gun.rotation+($Gun/Rotation.rotation if has_node("Gun/Rotation") else 0))
 	else:
 		position = slavePosition
-		slaveVel = move_and_slide(slaveVel*delta, Vector2(0,-1))/delta
+		slaveVel = move_and_slide(slaveVel, Vector2(0,-1))
 		if has_gun:
 			$Gun.rotation = gun_rotation
 			$Gun/Rotation/Sprite.flip_v = gun_rotation > PI/2

@@ -6,6 +6,7 @@ const MAX_PLAYERS = 5
 signal display_health(id, percent)
 signal set_main_camera
 signal player_disconnected
+signal game_begun
 
 var players = {}
 var self_data= {pName = "", player = -1, score = 0, dead = false, character = 0, color = 0}
@@ -107,4 +108,5 @@ remotesync func Preconfigured() -> void:
 
 remotesync func PostConfigureGame() -> void:
 	get_tree().set_pause(false)
+	emit_signal("game_begun")
 

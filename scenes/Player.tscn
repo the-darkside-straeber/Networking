@@ -11,26 +11,45 @@ height = 13.0937
 [sub_resource type="RectangleShape2D" id=2]
 extents = Vector2( 9.38063, 12.1275 )
 
-[node name="Player" type="KinematicBody2D"]
+[node name="Player" type="KinematicBody2D" groups=[
+"Bounce",
+]]
 collision_layer = 2
 script = ExtResource( 2 )
 
 [node name="Col" type="CollisionShape2D" parent="."]
+position = Vector2( 0, -11 )
 shape = SubResource( 1 )
 
 [node name="Sprite" type="Sprite" parent="."]
+position = Vector2( 0, -11 )
 texture = ExtResource( 1 )
 
 [node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2( 0, -11 )
 zoom = Vector2( 0.5, 0.5 )
 
 [node name="Gun" parent="." instance=ExtResource( 3 )]
-position = Vector2( 0, 2.5 )
+position = Vector2( 0, -11 )
 
 [node name="ItemDetect" type="Area2D" parent="."]
+position = Vector2( 0, -11 )
 collision_layer = 0
 collision_mask = 4
 
 [node name="Col" type="CollisionShape2D" parent="ItemDetect"]
-visible = false
 shape = SubResource( 2 )
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="UI" type="Control" parent="CanvasLayer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/UI"]
+margin_right = 40.0
+margin_bottom = 40.0

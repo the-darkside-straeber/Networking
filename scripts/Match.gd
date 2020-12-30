@@ -1,10 +1,11 @@
 extends Node
 
 const CHARACTERS := ["Default"]
-const GUNS := ["Shotgun", "Handgun"]
+const GUNS := ["Shotgun", "Handgun", "Bazooka"]
 
 var alive := 0 setget _set_alive
 var bullet_reasource := preload("res://scenes/Bullet.tscn")
+var explotion_reasource := preload("res://scenes/Explotion.tscn")
 
 
 func get_sprite(character: int, color: int) -> Resource:
@@ -31,15 +32,25 @@ remotesync func make_bullet(
 	speed: int, lifetime: float,
 	ignore: int,
 	force: int,
-	damage: int
+	damage: int,
+	type: String
 ) -> void:
 	var bullet : Bullet = bullet_reasource.instance()
 	bullet.position = position
-	bullet.rotation = rotation
-	bullet.speed = speed
+	#bullet.rotation = rotation
+	bullet.vel = Vector2(cos(rotation),sin(rotation))*speed
 	bullet.lifetime = lifetime
-	bullet.ignore= ignore
+	bullet.ignore = ignore
 	bullet.force = force
 	bullet.damage = damage
+	bullet.type = type
 	if get_tree().root.has_node("GM/Bullets"):
 		get_tree().root.get_node("GM/Bullets").add_child(bullet)
+
+
+remotesync func make_explotion(position: Vector2, ignore: int) -> void:
+	var explotion : Explotion = explotion_reasource.instance()
+	explotion.ignore = ignore
+	explotion.position = position
+	if get_tree().root.has_node("GM/Bullets"):
+		get_tree().root.get_node("GM/Bullets").call_deferred("add_child", explotion)
