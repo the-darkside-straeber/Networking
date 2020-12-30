@@ -136,6 +136,24 @@ rotation = 1.57079
 [node name="Spring17" parent="Gimmicks" instance=ExtResource( 7 )]
 position = Vector2( 1304, -15 )
 
+[node name="Spring18" parent="Gimmicks" instance=ExtResource( 7 )]
+position = Vector2( 233.413, 52.5256 )
+
+[node name="Spring19" parent="Gimmicks" instance=ExtResource( 7 )]
+position = Vector2( 319.354, -86.4883 )
+
+[node name="Spring20" parent="Gimmicks" instance=ExtResource( 7 )]
+position = Vector2( 557.287, 448.134 )
+rotation = 0.427547
+
+[node name="Spring21" parent="Gimmicks" instance=ExtResource( 7 )]
+position = Vector2( 1015.66, 311.671 )
+rotation = -0.554038
+
+[node name="Spring26" parent="Gimmicks" instance=ExtResource( 7 )]
+position = Vector2( -309.312, 430.638 )
+rotation = 0.542599
+
 [node name="Spring2" parent="Gimmicks" instance=ExtResource( 7 )]
 position = Vector2( -344, 224 )
 rotation = 1.57079
